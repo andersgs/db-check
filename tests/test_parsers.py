@@ -18,10 +18,10 @@ def test_parse_cluster_id():
 
 
 @pytest.mark.parametrize("test_input, expected", [
-    ("0       1269nt, > 71 | z4, z32... *",
-     OrderedDict([('clusterid', '580'), ('seqid', ' 71 | z4, z32'), ('length', '1269'), ('is_centroid', True), ('match', 1.0)])),
+    ("0       1269nt, > 71|z4,z32... *",
+     OrderedDict([('clusterid', '580'), ('seqid', ' 71\\|z4,z32'), ('length', '1269'), ('is_centroid', True), ('match', 1.0)])),
     ("1       1269nt, >72|z4,z32... at +/100.00%",
-     OrderedDict([('clusterid', '580'), ('seqid', '72|z4,z32'), ('length', '1269'), ('is_centroid', False), ('match', 1.0)]))]
+     OrderedDict([('clusterid', '580'), ('seqid', '72\\|z4,z32'), ('length', '1269'), ('is_centroid', False), ('match', 1.0)]))]
 )
 def test_cluster_member(test_input, expected):
     '''

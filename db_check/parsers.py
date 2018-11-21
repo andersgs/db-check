@@ -34,14 +34,14 @@ def parse_cluster_member(line, cluster_id):
     Return
     For 0
     {length: 1269,
-     seqid: 71|z4,z32,
+     seqid: 71\|z4,z32,
      is_centroid: True,
      match: 1,
      cluster_id: 597}
 
      For 1
     {length: 1269,
-     seqid: 71|z4,z32,
+     seqid: 71\|z4,z32,
      is_centroid: False,
      match: 1,
      cluster_id: 597}
@@ -53,7 +53,7 @@ def parse_cluster_member(line, cluster_id):
     *_, length, seqid = line.strip().split(None, 2)
     length = length.replace("nt,", "")
     fasta_header, match = seqid.split("...")
-    record['seqid'] = fasta_header[1:]
+    record['seqid'] = fasta_header[1:].replace("|", "\|")
     record['length'] = length
     if match[-1] == '*':
         is_centroid = True

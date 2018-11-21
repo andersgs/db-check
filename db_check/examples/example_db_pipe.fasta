@@ -1,0 +1,16 @@
+>seq1|catA Same as seq2 but different category
+AACCTTCATACAGATCTAGA
+>seq2|catB Same as seq1 but different category
+AACCTTCATACAGATCTAGA
+>seq3|catA Subsequence of seq1 and seq2
+CCTTCATACAGATCT
+>seq4|catC Same as seq5 by different ID
+GTCTAAAGCAGTGATCTCCC
+>seq5|catC Same as seq4 by different ID
+GTCTAAAGCAGTGATCTCCC
+>seq6|catD Same ID as below, but different sequence
+TAGTCTAGCCGCTGGTAATC
+>seq6|catD Same ID as above but different sequence
+GACACGGGTAGGACCATCAG
+>seq7|catE Unique sequence
+TAATAAGGATAGTGCGAAAG
