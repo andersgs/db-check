@@ -23,8 +23,6 @@ def check_params(ctx):
     Check that if delimter is set that field is also set. 
     Check that if regex is set, delimeter and field are not
     '''
-    #ctx = click.get_current_context()
-    print(ctx.params)
     opts = [ctx.params.get('delimiter', None) is None,
             ctx.params.get('field', None) is None,
             ctx.params.get('regex', None) is None]
@@ -72,7 +70,6 @@ def run_db_check(delimiter, field, regex, author, db_name, threads, prefix, exam
     '''
     Check a FASTA DB for potential issues.
     '''
-    print(delimiter)
     info("Welcome do db-check.")
     info("Running some routine checks...")
     check_params()
