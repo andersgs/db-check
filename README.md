@@ -141,4 +141,3 @@ db-check --example | pandoc --from markdown --to plain > report.txt
 - add conda recipe
 - add brew recipe
 - add travisCI recipe
-- add bumpversion config
