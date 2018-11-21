@@ -17,15 +17,17 @@ from db_check.messages import error, info
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
-def check_params():
+@click.pass_context
+def check_params(ctx):
     '''
     Check that if delimter is set that field is also set. 
     Check that if regex is set, delimeter and field are not
     '''
-    ctx = click.get_current_context()
-    opts = [ctx.params['delimiter'] is None,
-            ctx.params['field'] is None,
-            ctx.params['regex'] is None]
+    #ctx = click.get_current_context()
+    print(ctx.params)
+    opts = [ctx.params.get('delimiter', None) is None,
+            ctx.params.get('field', None) is None,
+            ctx.params.get('regex', None) is None]
     if all(opts):
         return
     if opts[0] and opts[1] and not opts[2]:
@@ -34,6 +36,23 @@ def check_params():
         return
     error(
         "ERROR: Delimiter and field must be specified OR regex OR None.")
+    ctx.exit()
+
+
+def run_example(ctx, param, value):
+    '''
+    Run example data
+    '''
+    if not value:
+        return
+    fasta = pathlib.Path(__file__).parent / "examples" / "example_db.fasta"
+    ctx.params = dict(delimiter=None, field=None,
+                      regex=".*~~(.*)", threads=1, author="Example", db_name="db-check example",
+                      prefix="example", keep_files=False, fasta=fasta)
+    ctx.scope(cleanup=False)
+    ctx.invoke(run_db_check, delimiter=None, field=None,
+               regex=".*~~(.*)", threads=1, author="Example", db_name="db-check example",
+               prefix="example", keep_files=False, fasta=fasta)
     ctx.exit()
 
 
@@ -46,12 +65,14 @@ def check_params():
 @click.option("-t", "--threads", default=1, help="How many threads to give CD-HIT (default: 1)")
 @click.option("-p", "--prefix", default="cdhit", help="Prefix of output files from CD-HIT (default: cdhit)")
 @click.option("-k", "--keep_files", help="Whether to keep CD-HIT output files (default: False)", is_flag=True)
+@click.option("--example", help="Run an example set", is_flag=True, is_eager=True, callback=run_example)
 @click.version_option(version=version_string, message=f"db-check v{version_string}")
 @click.argument("fasta")
-def run_db_check(delimiter, field, regex, author, db_name, threads, prefix, keep_files, fasta):
+def run_db_check(delimiter, field, regex, author, db_name, threads, prefix, example, keep_files, fasta):
     '''
     Check a FASTA DB for potential issues.
     '''
+    print(delimiter)
     info("Welcome do db-check.")
     info("Running some routine checks...")
     check_params()
