@@ -44,12 +44,8 @@ def run_example(ctx, param, value):
     if not value:
         return
     fasta = pathlib.Path(__file__).parent / "examples" / "example_db.fasta"
-    ctx.params = dict(delimiter=None, field=None,
-                      regex=".*~~(.*)", threads=1, author="Example", db_name="db-check example",
-                      prefix="example", keep_files=False, fasta=fasta)
-    ctx.scope(cleanup=False)
     ctx.invoke(run_db_check, delimiter=None, field=None,
-               regex=".*~~(.*)", threads=1, author="Example", db_name="db-check example",
+               regex=".*~~(.*)", threads=1, author="Example", db_name="Example DB",
                prefix="example", keep_files=False, fasta=fasta)
     ctx.exit()
 
