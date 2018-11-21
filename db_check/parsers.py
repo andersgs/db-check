@@ -119,7 +119,6 @@ def parse_categories(dataframe, **parse_args):
         field = int(parse_args['field'])
         dataframe['category'] = dataframe.seqid.str.split(
             delimiter).str.get(field)
-        print(dataframe)
     elif "regex" in parse_args.keys():
         regex = parse_args['regex']
         dataframe['category'] = dataframe.seqid.str.extract(
