@@ -7,3 +7,6 @@ Pipfile*
 test-MAC194*
 test*.md
 .pytest_cache
+html*
+*.pdf
+*.html
