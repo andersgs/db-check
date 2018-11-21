@@ -39,6 +39,6 @@ def cluster_db(filename, prefix, threads=4):
     tmpdir = tempfile.TemporaryDirectory()
     workdir = pathlib.Path(tmpdir.name)
     wd_prefix = workdir / prefix
-    p = cdhit('-i', f'{filename.as_posix()}', '-o', f'{wd_prefix.as_posix()}',
+    p = cdhit('-i', f'{fn.as_posix()}', '-o', f'{wd_prefix.as_posix()}',
               '-c', '1.00', '-g', '1', '-T', threads, '-d', '0')
     return f"{wd_prefix}.clstr", tmpdir
