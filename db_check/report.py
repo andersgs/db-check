@@ -19,7 +19,7 @@ def preamble(obj):
     today = dt.date.today().strftime("%Y-%m-%d")
     title = header(f"db-check Report {obj.db_name}", 1)
     subtitle = italics(f"By {obj.author} on {today}")
-    print(title, subtitle, SEP, sep='\n')
+    print(title, subtitle, SEP, sep='\n\n')
 
 
 def summary(obj):
@@ -44,7 +44,7 @@ def summary(obj):
           total_entries,
           total_clusters,
           n_unique_seq,
-          SEP, sep='\n')
+          SEP, sep='\n\n')
 
 
 def clusters_summary(obj):
