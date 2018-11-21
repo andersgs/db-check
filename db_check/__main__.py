@@ -11,6 +11,7 @@ from db_check.clustering import *
 from db_check.parsers import *
 from db_check.checklist import DBChecklist
 from db_check.report import *
+from db_check.messages import error, info
 
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
@@ -31,8 +32,8 @@ def check_params():
         return
     if not opts[0] and not opts[1] and opts[2]:
         return
-    click.secho(
-        "ERROR: Delimiter and field must be specified OR regex OR None.", fg="red")
+    error(
+        "ERROR: Delimiter and field must be specified OR regex OR None.")
     ctx.exit()
 
 
@@ -42,24 +43,42 @@ def check_params():
 @click.option("-r", "--regex", default=None, help="When parsing a category from seqid extract using this regex.")
 @click.option("-a", "--author", default=f"{os.getlogin()}", help="Who is running the check. (default: $USER)")
 @click.option("-n", "--db_name", default=None, help="Name of the Database. (default: filename)")
+@click.option("-t", "--threads", default=1, help="How many threads to give CD-HIT (default: 1)")
+@click.option("-p", "--prefix", default="cdhit", help="Prefix of output files from CD-HIT (default: cdhit)")
+@click.option("-k", "--keep_files", help="Whether to keep CD-HIT output files (default: False)", is_flag=True)
 @click.version_option(version=version_string, message=f"db-check v{version_string}")
 @click.argument("fasta")
-def run_db_check(delimiter, field, regex, author, db_name, fasta):
+def run_db_check(delimiter, field, regex, author, db_name, threads, prefix, keep_files, fasta):
     '''
     Check a FASTA DB for potential issues.
     '''
+    info("Welcome do db-check.")
+    info("Running some routine checks...")
     check_params()
+    check_dependencies()
     if db_name is None:
         db_name = pathlib.Path(fasta).stem
-    clusters = cluster_db(fasta)
+    info("Clustering your DB...")
+    [clusters, workdir] = cluster_db(fasta, prefix, threads=threads)
+    info("Parsing the results...")
     tab = parse_clustering(clusters)
     if delimiter is not None and field is not None:
         tab = parse_categories(tab, delimiter=delimiter, field=field)
     elif regex is not None:
         tab = parse_categories(tab, regex=regex)
+    info("Going over all the checks...")
     checklist = DBChecklist(tab, author=author, db_name=db_name)
     checklist.ticks()
+    info("Printing your report...")
     generate_report(checklist)
+    if keep_files:
+        info("You decided to keep the files... Here you go...")
+        wd = pathlib.Path(workdir.name)
+        for f in wd.glob(prefix+"*"):
+            info(f"Keeping {f.name}")
+            shutil.copyfile(f.absolute(), f.name)
+    workdir.cleanup()
+    info("Happy publishing!")
 
 
 if __name__ == "__main__":
