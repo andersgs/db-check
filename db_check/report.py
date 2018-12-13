@@ -62,6 +62,12 @@ def clusters_summary(obj):
           tab_body,
           SEP,
           sep="\n\n")
+    if tab['max'].values[0] > 1:
+        cluster_report(obj)
+    else:
+        msg = bold(
+            "Congratulations! There were no clusters with more than one sequence.")
+        print(msg, sep="\n")
 
 
 def duplicate_report(obj):
@@ -83,6 +89,31 @@ def duplicate_report(obj):
         tab_body = tabulate(h, showindex=False,
                             headers=h.columns.values, tablefmt=TABLEFMT)
         print(subtitle,
+              tab_cap,
+              tab_body,
+              "",
+              sep="\n\n")
+    print(SEP, sep="\n")
+
+
+def cluster_report(obj):
+    '''
+    Given there are clusters, print out a cluster report, printing clusters with multiple hits
+    '''
+    tab = obj.cluster_size_dist
+    subtitle = header("Clusters with more than one sequence", 3)
+    print(subtitle, sep="\n")
+    g = obj.df.groupby('clusterid')
+    ix = g.size() > 1
+    ix = sorted(ix.index[ix], key=int)
+    for i in ix:
+        h = g.get_group(i)
+        subsubtitle = header(f"Cluster {i}", 4)
+        col_headers = h.columns.values
+        tab_cap = f"Title: Sequences in cluster {i}"
+        tab_body = tabulate(h, showindex=False,
+                            headers=col_headers, tablefmt=TABLEFMT)
+        print(subsubtitle,
               tab_cap,
               tab_body,
               "",
