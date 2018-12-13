@@ -73,10 +73,6 @@ def duplicate_report(obj):
     ix = tab.duplicated('seqid', keep=False)
     if sum(ix) == 0:
         msg = bold("Congratulations! No duplicates found.")
-        print(tab,
-              msg,
-              SEP,
-              sep="\n")
         return
     print(title, sep="\n")
     g = tab[ix].groupby("seqid")
@@ -154,6 +150,7 @@ def generate_report(checklist_obj):
     '''
     Generate various summaries
     '''
+    breakpoint()
     preamble(checklist_obj)
     summary(checklist_obj)
     clusters_summary(checklist_obj)
