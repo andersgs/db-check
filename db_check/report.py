@@ -94,7 +94,9 @@ def category_report(obj):
     '''
     Given categories have been parse, print out a category report.
     '''
-    tab = obj.categories_by_cluster_dist_sum
+    tab = getattr(obj, "categories_by_cluster_dist_sum", None)
+    if tab is None:
+        return
     col_header = tab.columns.values
     title = header("Category report", 2)
     subtitle = header("Distribution of categories by cluster of sequences.", 3)
@@ -150,7 +152,6 @@ def generate_report(checklist_obj):
     '''
     Generate various summaries
     '''
-    breakpoint()
     preamble(checklist_obj)
     summary(checklist_obj)
     clusters_summary(checklist_obj)
