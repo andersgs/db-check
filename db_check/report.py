@@ -72,7 +72,7 @@ def duplicate_report(obj):
     tab = obj.df
     ix = tab.duplicated('seqid', keep=False)
     if sum(ix) == 0:
-        msg = bold("Congratulations! No duplicates found.")
+        msg = bold("Congratulations! No duplicated IDs found.")
         return
     print(title, sep="\n")
     g = tab[ix].groupby("seqid")
